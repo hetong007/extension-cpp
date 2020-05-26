@@ -8,13 +8,10 @@ import fps_cpu
 torch.manual_seed(42)
 
 class FPS(nn.Module):
-    def __init__(self, npoints, batch, ratio, random_first):
-        super(LLTM, self).__init__()
-        self.npoints = npoints
-        self.batch = batch
+    def __init__(self, ratio, random_first):
+        super(FPS, self).__init__()
         self.ratio = ratio
         self.random_first = random_first
 
-    def forward(self, pos):
-        return fps_cpu.fps_cpu(pos, batch, ratio, random_first)
-
+    def forward(self, pos, batch):
+        return fps_cpu.fps_cpu(pos, batch, self.ratio, self.random_first)
