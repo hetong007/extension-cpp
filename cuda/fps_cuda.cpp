@@ -21,7 +21,7 @@ std::vector<torch::Tensor> fps_cuda(
     torch::Tensor src,
     torch::Tensor ptr,
     double ratio,
-    bool random_start) {}
+    bool random_start) {
   CHECK_INPUT(src);
   CHECK_INPUT(ptr);
 

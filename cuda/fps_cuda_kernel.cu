@@ -66,7 +66,7 @@ __global__ void fps_kernel(const scalar_t *src, const int64_t *ptr,
   }
 }
 
-torch::Tensor fps_cuda(torch::Tensor src, torch::Tensor ptr, double ratio,
+torch::Tensor fps_cuda_interface(torch::Tensor src, torch::Tensor ptr, double ratio,
                        bool random_start) {
 
   CHECK_CUDA(src);
