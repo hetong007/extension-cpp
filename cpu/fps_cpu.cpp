@@ -1,6 +1,9 @@
 #include <torch/extension.h>
 #include <vector>
 
+#define CHECK_CPU(x) AT_ASSERTM(x.device().is_cpu(), #x " must be CPU tensor")
+#define CHECK_INPUT(x) AT_ASSERTM(x, "Input mismatch")
+
 inline torch::Tensor get_dist(torch::Tensor x, int64_t idx) {
   return (x - x[idx]).norm(2, 1);
 }

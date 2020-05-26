@@ -16,4 +16,5 @@ class FPS(nn.Module):
         self.random_first = random_first
 
     def forward(self, pos):
-        return fps_cpu(pos, batch, ratio, random_first)
+        return fps_cpu.fps_cpu(pos, batch, ratio, random_first)
+
