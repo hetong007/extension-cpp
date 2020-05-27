@@ -29,5 +29,5 @@ std::vector<torch::Tensor> fps_cuda(
 }
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
-  m.def("fps_cuda", &fps_cuda, "Farthest Point Sampling (CUDA)");
+  m.def("fps", &fps_cuda, "Farthest Point Sampling (CUDA)");
 }

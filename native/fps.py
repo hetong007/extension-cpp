@@ -57,4 +57,4 @@ class FPS(nn.Module):
         self.random_first = random_first
 
     def forward(self, pos):
-        return fps_python(pos, self.ratio, self.random_first)
+        return fps_python(pos, self.ratio)

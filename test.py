@@ -3,37 +3,45 @@ import torch.nn as nn
 import numpy as np
 import time
 
-dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-x = np.random.uniform(size=(16, 1024, 3))
-x = torch.tensor(x).to(dev).type(torch.float)
+cuda_dev = torch.device("cuda")
+cpu_dev = torch.device("cpu")
 
+x = np.random.uniform(size=(16, 1024, 3))
+x = torch.tensor(x).type(torch.float)
+x_gpu = x.to(cuda_dev)
 B, N, C = x.shape
-x_flat = x.view(-1, 3)
-batch = torch.linspace(0, B-1, steps=B).repeat(N, 1).permute(1, 0).reshape(-1).to(dev).type(torch.long)
+
+x_flat_cpu = x.view(-1, 3).to(cpu_dev)
+x_flat_gpu = x_flat_cpu.to(cuda_dev)
+batch_cpu = torch.linspace(0, B-1, steps=B).repeat(N, 1).permute(1, 0).reshape(-1).type(torch.long).to(cpu_dev)
+batch_gpu = batch_cpu.to(cuda_dev)
 
 # CUDA
-import cuda
-fps_cuda = cuda.fps.FPS(0.2, True)
+import cuda.fps as cuda_fps
+fps_cuda = cuda_fps.FPS(0.2, True)
 
 # CPU
-import cpu
-fps_cpu = cpu.fps.FPS(0.2, True)
+import cpu.fps as cpu_fps
+fps_cpu = cpu_fps.FPS(0.2, True)
 
 # Python NATIVE
-import native
-fps_native = native.fps.FPS(0.2, True)
+import native.fps as native_fps
+fps_native = native_fps.FPS(0.2, True)
 
+# Timing
+N = 100
 tic = time.time()
-for i in range(100):
-    tmp = fps_cuda(x, batch)
+for i in range(N):
+    tmp = fps_cpu(x_flat_cpu, batch_cpu)
 print(time.time() - tic)
 
 tic = time.time()
-for i in range(100):
-    tmp = fps_cpu(x, batch)
+for i in range(N):
+    tmp = fps_native(x_gpu)
 print(time.time() - tic)
 
 tic = time.time()
-for i in range(100):
-    tmp = fps_native(x)
+for i in range(N):
+    tmp = fps_cuda(x_flat_gpu, batch_gpu)
 print(time.time() - tic)
+

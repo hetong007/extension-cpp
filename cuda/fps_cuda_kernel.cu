@@ -64,9 +64,10 @@ __global__ void fps_kernel(const scalar_t *src, const int64_t *ptr,
       out[m] = best_dist_idx[0];
     }
   }
+
 }
 
-torch::Tensor fps_cuda_interface(torch::Tensor src, torch::Tensor ptr, double ratio,
+std::vector<torch::Tensor> fps_cuda_interface(torch::Tensor src, torch::Tensor ptr, double ratio,
                        bool random_start) {
 
   CHECK_CUDA(src);
@@ -107,5 +108,5 @@ torch::Tensor fps_cuda_interface(torch::Tensor src, torch::Tensor ptr, double ra
         dist.data_ptr<scalar_t>(), out.data_ptr<int64_t>(), src.size(1));
   });
 
-  return out;
+  return {out};
 }

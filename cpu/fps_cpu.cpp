@@ -1,5 +1,6 @@
 #include <torch/extension.h>
 #include <vector>
+#include <iostream>
 
 #define CHECK_CPU(x) AT_ASSERTM(x.device().is_cpu(), #x " must be CPU tensor")
 #define CHECK_INPUT(x) AT_ASSERTM(x, "Input mismatch")
@@ -8,9 +9,8 @@ inline torch::Tensor get_dist(torch::Tensor x, int64_t idx) {
   return (x - x[idx]).norm(2, 1);
 }
 
-torch::Tensor fps_cpu(torch::Tensor src, torch::Tensor ptr, double ratio,
+torch::Tensor fps_cpu(torch::Tensor src, torch::Tensor ptr, float ratio,
                       bool random_start) {
-
   CHECK_CPU(src);
   CHECK_CPU(ptr);
   CHECK_INPUT(ptr.dim() == 1);
@@ -56,5 +56,5 @@ torch::Tensor fps_cpu(torch::Tensor src, torch::Tensor ptr, double ratio,
 }
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
-  m.def("fps_cpu", &fps_cpu, "Farthest Point Sampling");
+  m.def("fps", &fps_cpu, "Farthest Point Sampling");
 }
